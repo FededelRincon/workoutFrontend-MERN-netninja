@@ -8,8 +8,8 @@ const Navbar = () => {
                     <h1>Workout Buddy</h1>
                 </NavLink>
 
-                <NavLink to="/algo" className={ ({ isActive }) => isActive ? "nav-active" : "" } >Algo</NavLink>
-                <NavLink to="/otro" className={ ({ isActive }) => isActive ? "nav-active" : "" } >Otro</NavLink>
+                {/* <NavLink to="/algo" className={ ({ isActive }) => isActive ? "nav-active" : "" } >Algo</NavLink> */}
+                {/* <NavLink to="/otro" className={ ({ isActive }) => isActive ? "nav-active" : "" } >Otro</NavLink> */}
 
             </div>
         </header>
