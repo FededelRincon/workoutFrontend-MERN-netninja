@@ -110,3 +110,13 @@ div.error {
 input.error {
   border: 1px solid var(--error);
 }
+
+.delete{
+  background-color: white;
+  transition: 500ms;
+}
+
+.delete:hover{
+  background-color: var(--error);
+  transition: 500ms;
+}
