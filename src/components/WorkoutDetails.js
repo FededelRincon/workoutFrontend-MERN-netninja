@@ -29,9 +29,10 @@ const WorkoutDetails = ({ workout }) => {
             <p><strong>Load{' '}: </strong> {load} kg </p>
             <p><strong>Reps{' '}: </strong> {reps} </p>
             <p>{formatDistanceToNow(new Date(createdAt), { addSuffix: true})}</p>
-            <span className="delete material-symbols-outlined" onClick={handleClickDelete}>delete</span>
-
-            <button className="" onClick={(e) => handleClickEdit(workout) }>edit</button>
+            <div className='botons-right'>
+                <div className="delete material-symbols-outlined" onClick={handleClickDelete}>delete</div>
+                <div className="edit material-symbols-outlined" onClick={(e) => handleClickEdit(workout) }>edit</div>
+            </div>
         </div>
     )
 }

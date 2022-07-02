@@ -111,12 +111,21 @@ input.error {
   border: 1px solid var(--error);
 }
 
-.delete{
+.delete, .edit{
   background-color: white;
+  transition: 500ms;
+  border-radius: 50%;
+  padding: 5px;
+}
+
+.delete:hover, .edit:hover{
+  background-color: var(--error);
   transition: 500ms;
 }
 
-.delete:hover{
-  background-color: var(--error);
-  transition: 500ms;
+.botons-right{
+  margin-top: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
 }
