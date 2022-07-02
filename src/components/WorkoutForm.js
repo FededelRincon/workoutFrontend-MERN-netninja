@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useWorkoutsContext } from '../hooks/useWorkoutsContext'
 
 const WorkoutForm = () => {
-  const { dispatch } = useWorkoutsContext()
+  const {dispatch, update} = useWorkoutsContext();
 
   const [title, setTitle] = useState('');
   const [load, setLoad] = useState('');
@@ -11,35 +11,77 @@ const WorkoutForm = () => {
   const [emptyFields, setEmptyFields] = useState([]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const workout = {title, load, reps}
-    
-    const response = await fetch('/api/workouts', {
-      method: 'POST',
-      body: JSON.stringify(workout),
-      headers: {
-        'Content-Type': 'application/json'
+
+    if(!update){
+      //so... new workout
+      const response = await fetch('/api/workouts', {
+        method: 'POST',
+        body: JSON.stringify(workout),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const json = await response.json()
+  
+      if (!response.ok) {
+        setError(json.error)
+        setEmptyFields(json.emptyFields)
       }
-    })
-    const json = await response.json()
+      if (response.ok) {
+        setTitle('')
+        setLoad('')
+        setReps('')
+        setError(null)
+        setEmptyFields([])
+        dispatch({type: 'CREATE_WORKOUT', payload: json})
+      }
+    } else {
+      const workoutUpdate = {title, load, reps}
+      workoutUpdate._id = update._id;
 
-    console.log(json)
-    if (!response.ok) {
-      setError(json.error)
-      setEmptyFields(json.emptyFields)
-    }
-    if (response.ok) {
-      setTitle('')
-      setLoad('')
-      setReps('')
-      setError(null)
-      setEmptyFields([])
-      dispatch({type: 'CREATE_WORKOUT', payload: json})
-    }
+      // update workout
+      const response = await fetch(`/api/workouts/${update._id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(workoutUpdate),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      const json = await response.json()
 
+      if (!response.ok) {
+        setError(json.error)
+        setEmptyFields(json.emptyFields)
+      }
+      if (response.ok) {
+        setTitle('')
+        setLoad('')
+        setReps('')
+        setError(null)
+        setEmptyFields([])
+        dispatch({type: 'UPDATE_WORKOUT', payload: workoutUpdate})
+        dispatch({type: 'UPDATE_REMOVE_WORKOUT'})
+      }
+    }
+    
   }
 
+  useEffect(() => {
+    if(update){
+      setTitle(update.title)
+      setLoad(update.load)
+      setReps(update.reps)
+    }
+  }, [update])
+
+  useEffect(() => {
+
+  }, [dispatch])
+  
   return (
     <form className="create" onSubmit={handleSubmit}> 
       <h3>Add a New Workout</h3>
@@ -69,7 +111,13 @@ const WorkoutForm = () => {
 
       />
 
-      <button>Add Workout</button>
+    {
+      update ? (
+        <button>Update Workout</button>
+      ):(
+        <button>Add Workout</button>
+      ) 
+    }
       {error && <div className="error">{error}</div>}
     </form>
   )

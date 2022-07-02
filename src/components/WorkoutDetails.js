@@ -9,7 +9,7 @@ const WorkoutDetails = ({ workout }) => {
     const { dispatch } = useWorkoutsContext();
     
 
-    const handleClick = async () => {
+    const handleClickDelete = async () => {
         const response = await fetch('/api/workouts/' + workout._id, {
             method: 'DELETE'
         })
@@ -17,7 +17,10 @@ const WorkoutDetails = ({ workout }) => {
         if(response.ok){
             dispatch({ type: 'DELETE_WORKOUT', payload: json })
         }
+    }
 
+    const handleClickEdit = (workout) => {
+        dispatch({type: 'UPDATE_SET_WORKOUT', payload: workout})
     }
 
     return (
@@ -26,7 +29,9 @@ const WorkoutDetails = ({ workout }) => {
             <p><strong>Load{' '}: </strong> {load} kg </p>
             <p><strong>Reps{' '}: </strong> {reps} </p>
             <p>{formatDistanceToNow(new Date(createdAt), { addSuffix: true})}</p>
-            <span className="delete material-symbols-outlined" onClick={handleClick}>delete</span>
+            <span className="delete material-symbols-outlined" onClick={handleClickDelete}>delete</span>
+
+            <button className="" onClick={(e) => handleClickEdit(workout) }>edit</button>
         </div>
     )
 }
